@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>House of Wears Rental Shop - Products</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>House of Wears Rental Shop</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Products</h2>
+
+        <div class="products-container">
+            <div class="product">
+                <img src="photo.jpeg" alt="Product 1">
+                <div class="product-details">
+                    <h3>Product 1</h3>
+                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget mauris eu
+                        velit tristique commodo. Vestibulum consectetur, lorem in scelerisque bibendum, velit ipsum
+                        tincidunt enim, et facilisis dolor arcu eu lacus.</p>
+                    <p class="price">$10/day</p>
+                    <button class="add-to-cart-button">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="photo.jpeg" alt="Product 2">
+                <div class="product-details">
+                    <h3>Product 2</h3>
+                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget mauris eu
+                        velit tristique commodo. Vestibulum consectetur, lorem in scelerisque bibendum, velit ipsum
+                        tincidunt enim, et facilisis dolor arcu eu lacus.</p>
+                    <p class="price">$15/day</p>
+                    <button class="add-to-cart-button">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product">
+                <img src="photo.jpeg" alt="Product 3">
+                <div class="product-details">
+                    <h3>Product 3</h3>
+                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget mauris eu
+                        velit tristique commodo. Vestibulum consectetur, lorem in scelerisque bibendum, velit ipsum
+                        tincidunt enim, et facilisis dolor arcu eu lacus.</p>
+                    <p class="price">$20/day</p>
+                    <button class="add-to-cart-button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 House of Wears Rental Shop</p>
+    </footer>
+
+    <script>
+        // get all add to cart buttons
+        var addToCartButtons = document.getElementsByClassName('add-to-cart-button');
+
+        // add event listener to each add to cart button
+        for (var i = 0; i < addToCartButtons.length; i++) {
+            addToCartButtons[i].addEventListener('click', addToCart);
+        }
+
+        // function to add item to cart
+        function addToCart(event) {
+            var button = event.target;
+            var product = button.parentElement;
+            var productName = product.getElementsByClassName('product-name')[0].innerText;
+            var productPrice = product.getElementsByClassName('price')[0].innerText;
+            var cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            var cartItems = document.getElementsByClassName('cart-items')[0];
+            var cartItemNames = cartItems.getElementsByClassName('cart-item-name');
+            for (var i = 0; i < cartItemNames.length; i++) {
+                if (cartItemNames[i].innerText == productName) {
+                    alert('This item is already added to the cart');
+                    return;
+                }
+            }
+            var cartItemContent = `
+    <div class="cart-item-details">
+      <span class="cart-item-name">${productName}</span>
+      <span class="cart-item-price">${productPrice}</span>
+    </div>
+    <div class="cart-item-quantity">
+      <input class="cart-item-input" type="number" value="1">
+      <button class="remove-button" type="button">Remove</button>
+    </div>`;
+            cartItem.innerHTML = cartItemContent;
+            cartItems.appendChild(cartItem);
+            cartItem.getElementsByClassName('remove-button')[0].addEventListener('click', removeCartItem);
+            cartItem.getElementsByClassName('cart-item-input')[0].addEventListener('change', quantityChanged);
+            updateCartTotal();
+        }
+
+        // function to remove item from cart
+        function removeCartItem(event) {
+            var buttonClicked = event.target;
+            buttonClicked.parentElement.parentElement.remove();
+            updateCartTotal();
+        }
+
+        // function to change quantity of item in cart
+        function quantityChanged(event) {
+            var input = event.target;
+            if (isNaN(input.value) || input.value <= 0) {
+                input.value = 1;
+            }
+            updateCartTotal();
+        }
+
+        // function to update cart total
+        function updateCartTotal() {
+            var cartItemContainer = document.getElementsByClassName('cart-items')[0];
+            var cartItems = cartItemContainer.getElementsByClassName('cart-item');
+            var total = 0;
+            for (var i = 0; i < cartItems.length; i++) {
+                var cartItem = cartItems[i];
+                var priceElement = cartItem.getElementsByClassName('cart-item-price')[0];
+                var quantityElement = cartItem.getElementsByClassName('cart-item-input')[0];
+                var price = parseFloat(priceElement.innerText.replace('$', ''));
+                var quantity = quantityElement.value;
+                total += price * quantity;
+            }
+            total = Math.round(total * 100) / 100;
+            document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total;
+        }
+    </script>
+</body>
+
+</html>
